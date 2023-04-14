@@ -1,6 +1,10 @@
 
 import streamlit as st
 import openai
+import pandas as pd
+
+df = pd.read_csv('tbl_st.csv')
+sentences = df["サンプル 応答文"].to_list()
 
 # Streamlit Community Cloudの「Secrets」からOpenAI API keyを取得
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key # secrets に後ほどAPI Keyを保存する
@@ -8,7 +12,7 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key # secrets に後ほどAPI K
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": sentences}
+        {"role": "system", "content": sentences} # 
         ]
 
 # チャットボットとやりとりする関数
