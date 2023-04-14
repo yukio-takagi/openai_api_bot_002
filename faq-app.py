@@ -4,8 +4,8 @@ import openai
 import pandas as pd
 
 df = pd.read_csv('tbl_st.csv')
-st.table(df["サンプル 応答文"])
-# sentences = df["サンプル 応答文"].to_list()
+#st.table(df["サンプル 応答文"])
+sentences = df["サンプル 応答文"].to_list()
 
 # Streamlit Community Cloudの「Secrets」からOpenAI API keyを取得
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key # secrets に後ほどAPI Keyを保存する
@@ -13,7 +13,7 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key # secrets に後ほどAPI K
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": {st.table(df["サンプル 応答文"])}}  
+        {"role": "system", "content": "あなたは市役所でもとても優秀な粗大ごみ受付担当です"}  
         ]
 
 # チャットボットとやりとりする関数
@@ -22,10 +22,14 @@ def communicate():
 
     user_message = {"role": "user", "content": st.session_state["user_input"]}
     messages.append(user_message)
+    
+    assistant_message = {"role": "assistant", "content": sentences}
+    messages.append(assistant_message)
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=messages
+        messages=messages,
+        max_tokens=256
     )  
 
     bot_message = response["choices"][0]["message"]
