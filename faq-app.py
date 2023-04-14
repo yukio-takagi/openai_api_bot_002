@@ -20,19 +20,25 @@ if "messages" not in st.session_state:
 def communicate():
     messages = st.session_state["messages"]
 
-    user_message = {"role": "user", "content": st.session_state["user_input"]}
-    messages.append(user_message)
-    
-    assistant_message = {"role": "assistant", "content": sentences}
-    messages.append(assistant_message)
+#    user_message = {"role": "user", "content": st.session_state["user_input"]}
+#    messages.append(user_message)
+#    
+#    assistant_message = {"role": "assistant", "content": sentences}
+#    messages.append(assistant_message)
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-        max_tokens=256
-    )  
+    bot_message = openai.Completion.create(
+      engine="text-davinci-003", 
+      prompt=f"{sentences}\n\nQ: {st.session_state["user_input"]}\n", 
+      max_tokens=256
+    )["choices"][0]["text"]
 
-    bot_message = response["choices"][0]["message"]
+#    response = openai.ChatCompletion.create(
+#        model="gpt-3.5-turbo",
+#        messages=messages,
+#        max_tokens=256
+#    )  
+
+#    bot_message = response["choices"][0]["message"]
     messages.append(bot_message)
 
     st.session_state["user_input"] = ""  # 入力欄を消去
