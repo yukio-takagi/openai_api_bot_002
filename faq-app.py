@@ -26,8 +26,9 @@ def communicate():
 #    assistant_message = {"role": "assistant", "content": sentences}
 #    messages.append(assistant_message)
 
-    bot_message = openai.Completion.create(engine="text-davinci-003", prompt=f"{sentences}\n\nQ: {st.session_state["user_input"]}\n", max_tokens=256)["choices"][0]["text"]
-        
+    query =  st.session_state["user_input"]
+    bot_message = openai.Completion.create(engine="text-davinci-003", prompt=f"{sentences}\n\nQ: {query}\n", max_tokens=256)["choices"][0]["text"]
+
 #    response = openai.ChatCompletion.create(
 #        model="gpt-3.5-turbo",
 #        messages=messages,
