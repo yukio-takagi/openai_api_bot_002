@@ -13,21 +13,22 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key # secrets に後ほどAPI K
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": "あなたは市役所でもとても優秀な粗大ごみ受付担当です"}  
+        {"role": "system", "content": "あなたは市役所のとても優秀な粗大ごみ受付担当です"}  
         ]
 
 # チャットボットとやりとりする関数
 def communicate():
     messages = st.session_state["messages"]
 
-#    user_message = {"role": "user", "content": st.session_state["user_input"]}
-#    messages.append(user_message)
+    user_message = {"role": "user", "content": st.session_state["user_input"]}
+    messages.append(user_message)
 #    
 #    assistant_message = {"role": "assistant", "content": sentences}
 #    messages.append(assistant_message)
 
     query =  st.session_state["user_input"]
     bot_message = openai.Completion.create(engine="text-davinci-003", prompt=f"{sentences}\n\nQ: {query}\n", max_tokens=256)["choices"][0]["text"]
+    assistant_message = {"role": "assistant", "content": bot_message}
 
 #    response = openai.ChatCompletion.create(
 #        model="gpt-3.5-turbo",
@@ -36,7 +37,8 @@ def communicate():
 #    )  
 
 #    bot_message = response["choices"][0]["message"]
-    messages.append(bot_message)
+#    messages.append(bot_message)
+    messages.append(assistant_message)
 
     st.session_state["user_input"] = ""  # 入力欄を消去
 
